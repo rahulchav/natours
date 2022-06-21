@@ -27,11 +27,7 @@ Router.patch(
   userController.updateMe
 );
 Router.delete('/deleteMe', userController.deleteMe);
-Router.get(
-  '/Me',
-  userController.getMe,
-  userController.oneUser
-);
+Router.get('/Me', userController.getMe, userController.oneUser);
 
 Router.use(authController.restrictTo('admin'));
 

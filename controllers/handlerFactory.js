@@ -18,8 +18,6 @@ exports.deleteOne = (model) =>
 
 exports.updateOne = (model) =>
   catchAsync(async (req, res, next) => {
-
-console.log(req.body);
     const upTour = await model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

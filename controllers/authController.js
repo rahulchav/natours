@@ -51,7 +51,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
 });
@@ -60,15 +60,13 @@ exports.login = catchAsync(async (req, res, next) => {
   // if varibal name is same as the value then user destructuring
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   // 1) Check if email and password exist
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
-  console.log(user);
+
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
@@ -188,7 +186,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  // const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
   //   await sendEmail({
   //     email: user.email,
@@ -202,7 +200,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   //   });
 
   try {
-    await new Email(user,resetURL).sendPasswordReset()
+    await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
@@ -212,7 +210,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
-    console.log(err);
 
     return next(
       new AppError('There was an error sending the email. Try again later!'),

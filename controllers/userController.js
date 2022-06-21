@@ -1,7 +1,7 @@
-const User = require('../models/userModel');
-const AppError = require('../utils/appError');
 const multer = require('multer');
 const sharp = require('sharp');
+const User = require('../models/userModel');
+const AppError = require('../utils/appError');
 
 const catchAsync = require('../utils/catchasync');
 const factory = require('./handlerFactory');
@@ -34,7 +34,6 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo');
 
 const filterObj = (obj, ...allowedFields) => {
-  console.log(obj);
   const newObj = {};
   Object.keys(obj).forEach((el) => {
     if (allowedFields.includes(el)) newObj[el] = obj[el];
@@ -53,9 +52,8 @@ exports.resizeUserPhoto = async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-  console.log(req.file.filename);
 
-   await sharp(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
@@ -65,8 +63,6 @@ exports.resizeUserPhoto = async (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
   // 1 create Error if user posts password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
