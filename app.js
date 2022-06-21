@@ -28,7 +28,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // 1) GLOBAL MIDDLEWARES
 
 // Set security HTTP headers
@@ -136,6 +135,7 @@ app.all('*', (req, res, next) => {
   next(new AppError(`cant find the ${req.originalUrl} on the server`, 404));
 });
 
+// error handler
 app.use(globalErrorHandler);
 
 module.exports = app;
