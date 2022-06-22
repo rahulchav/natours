@@ -5,12 +5,14 @@ import { logout } from './script';
 import { login } from './script';
 import { updateSettings } from './updateSetttings';
 import { bookTour } from './stripe';
+import { signin } from './script';
 
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
 const bookBtn = document.getElementById('book-tour');
+const signinform = document.querySelector('.form--signup');
 
 if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
@@ -60,5 +62,16 @@ if (bookBtn) {
     const tourId = e.target.dataset.tourId;
     console.log(tourId);
     bookTour(tourId);
+  });
+}
+
+if (signinform) {
+  signinform.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    signin(name, email, password, passwordConfirm);
   });
 }

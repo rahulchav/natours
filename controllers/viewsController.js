@@ -73,3 +73,9 @@ exports.getMyTours = async (req, res, next) => {
     tours: tour,
   });
 };
+
+exports.signin = (req, res, next) => {
+  res.status(200).render('signin', {
+    title: 'Create a new Account',
+  });
+};

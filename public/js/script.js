@@ -15,7 +15,7 @@ export const login = async (email, password) => {
       },
     });
 
-    console.log(res);
+    // console.log(res);
     if (res.data.status === 'success') {
       showAlert('success', 'Logged in successfully');
       window.setTimeout(() => {
@@ -34,8 +34,6 @@ export const logout = async () => {
       url: '/api/v1/users/logout',
     });
 
-
-
     if (res.data.status == 'success') {
       showAlert('success', 'Logged out successfully');
       window.setTimeout(() => {
@@ -44,5 +42,31 @@ export const logout = async () => {
     }
   } catch (err) {
     showAlert('error', 'Error logging out! Try again');
+  }
+};
+
+exports.signin = async (name, email, password, passwordConfirm) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: '/api/v1/users/signup',
+      data: {
+        email,
+        password,
+        passwordConfirm,
+        name,
+      },
+    });
+
+    console.log(res);
+    if (res.data.status === 'success') {
+      showAlert('success', 'signed up successfully');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (err) {
+    console.log(err);
+    showAlert('error', err.response.data.message);
   }
 };
