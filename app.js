@@ -24,6 +24,8 @@ const app = express();
 // Data sanitization against XSS
 // app.use(xss());
 
+app.enable('trust proxy');
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -86,7 +88,7 @@ app.use(
   })
 );
 
-app.use(compression())
+app.use(compression());
 
 // app.use((req, res, next) => {
 //   console.log('hello from the middleware ✅');
