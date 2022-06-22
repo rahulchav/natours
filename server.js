@@ -32,10 +32,11 @@ mongoose
   });
 
 const app = require('./app');
+const port = process.env.PORT||8000
 
 // console.log(process.env.PORT);    //we can use it in the Code
 
-const server = app.listen(8000, '127.0.0.1', () => {
+const server = app.listen(port, '127.0.0.1', () => {
   console.log(`listening on port ${process.env.PORT}...`);
 });
 
