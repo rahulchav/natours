@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
+
 const hpp = require('hpp');
 const xss = require('xss-clean');
 const AppError = require('./utils/appError');
@@ -16,6 +18,7 @@ const tourRouter = require('./routes/tourRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingsRouter = require('./routes/bookingsRoutes');
+const bookingController = require('./controllers/bookingsController');
 
 // MIDDLEWARE
 
@@ -32,6 +35,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 1) GLOBAL MIDDLEWARES
+app.use(cors());
 
 // Set security HTTP headers
 app.use(
@@ -56,6 +60,11 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+
+const Route =app.route('/webhook-checkout')
+Route.post(express.raw({type:'application/json'}),bookingController.webhookCheckout);
 
 // 3 development  middlewware
 
